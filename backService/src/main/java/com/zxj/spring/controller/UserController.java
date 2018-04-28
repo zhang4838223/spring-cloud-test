@@ -15,6 +15,11 @@ public class UserController {
 
     @GetMapping("/user/list")
     public String users() {
+//        try {
+//            Thread.sleep(5000L);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         System.out.println("server1111" + discoveryClient.getServices());
         return "zxj";
     }
