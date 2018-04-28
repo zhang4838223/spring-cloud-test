@@ -20,6 +20,6 @@ public class IndexController {
     public String index(){
         ResponseEntity<String> forEntity = restTemplate.getForEntity("http://provider-server/user/list", String.class);
         System.out.println(forEntity);
-        return "zhangxj:" + path;
+        return "zhangxj:" + path + "; result: " + forEntity;
     }
 }
