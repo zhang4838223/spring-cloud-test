@@ -20,7 +20,7 @@ public class IndexController {
     @Value("${path}")
     private String path;
 
-    @GetMapping("/index/")
+    @GetMapping("/index")
     public String index(){
         return "zhangxj:" + path + "; result: " + consumerService.doConsum();
     }
