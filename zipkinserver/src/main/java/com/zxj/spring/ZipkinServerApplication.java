@@ -12,7 +12,6 @@ import zipkin.server.EnableZipkinServer;
  */
 @SpringBootApplication
 @EnableZipkinServer
-@EnableAutoConfiguration
 public class ZipkinServerApplication {
 
     public static void main (String[] args) {
