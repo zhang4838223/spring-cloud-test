@@ -1,18 +1,28 @@
 package com.zxj.spring.controller;
 
+import com.google.gson.Gson;
 import com.zxj.spring.service.IConsumerService;
+import io.searchbox.client.JestClient;
+import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class IndexController {
 
-    @Autowired
-    private RestTemplate restTemplate;
+    Gson g = new Gson();
 
     @Autowired
     private IConsumerService consumerService;
@@ -20,8 +30,42 @@ public class IndexController {
     @Value("${path}")
     private String path;
 
+    @Autowired
+    private JestClient jestClient;
+
     @GetMapping("/index")
     public String index(){
         return "zhangxj:" + path + "; result: " + consumerService.doConsum();
+    }
+
+    @GetMapping("/put")
+    public String put(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "zhangsan");
+        map.put("time", new Date());
+
+        Index index = new Index.Builder(g.toJson(map)).index("test").type("spring").build();
+        try {
+            DocumentResult result = jestClient.execute(index);
+            return result.getJsonString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    @GetMapping("/search")
+    public String search(String name){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("test").addType("spring").build();
+        try {
+            SearchResult result = jestClient.execute(search);
+            return result.getJsonString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
     }
 }
