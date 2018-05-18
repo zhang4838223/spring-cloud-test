@@ -22,10 +22,6 @@ public class ConsumerServiceImpl implements IConsumerService {
     @HystrixCommand(fallbackMethod = "fallback")
     public String doConsum() {
         ResponseEntity<String> forEntity = restTemplate.getForEntity("http://provider-server/user/list", String.class);
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", "zhangsan");
-        map.put("time", new Date());
-        restTemplate.put("http://localhost:9200/test/spring/1", map);
         System.out.println(forEntity);
         return "zhangxj:" + "; result: " + forEntity;
     }
