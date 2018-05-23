@@ -12,6 +12,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -55,17 +56,57 @@ public class IndexController {
     }
 
     @GetMapping("/search")
+    @ResponseBody
     public String search(String name){
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         searchSourceBuilder.query(QueryBuilders.matchQuery("name", name));
+        searchSourceBuilder.size(2);
+        searchSourceBuilder.from(0);
 
         Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("test").addType("spring").build();
         try {
             SearchResult result = jestClient.execute(search);
-            return result.getJsonString();
+            return result.getSourceAsStringList().toString();
         } catch (IOException e) {
             e.printStackTrace();
             return "error";
         }
     }
+
+    @GetMapping("/rangeSearch")
+    @ResponseBody
+    public String rangeSearch(String begin, String end){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.rangeQuery("time").gte(begin).lte(end).includeLower(true).includeUpper(true));
+        searchSourceBuilder.size(2);
+        searchSourceBuilder.from(0);
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("test").addType("spring").build();
+        try {
+            SearchResult result = jestClient.execute(search);
+            return result.getSourceAsStringList().toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
+    @GetMapping("/wildcardSearch")
+    @ResponseBody
+    public String wildcardSearch(String name){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.query(QueryBuilders.wildcardQuery("name", "*"+name+"*"));
+        searchSourceBuilder.size(2);
+        searchSourceBuilder.from(0);
+
+        Search search = new Search.Builder(searchSourceBuilder.toString()).addIndex("test").addType("spring").build();
+        try {
+            SearchResult result = jestClient.execute(search);
+            return result.getSourceAsStringList().toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+
 }
