@@ -9,6 +9,7 @@ import com.zxj.log.model.AppLog;
  */
 public class EsLogger {
     public static EsLogger logger = new EsLogger();
+    private EsLogger(){}
     public void info(String title, String topic, String content){
         AppLog log = new AppLog();
         log.setContent(content);
