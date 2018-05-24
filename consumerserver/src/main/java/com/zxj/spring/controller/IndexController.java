@@ -1,6 +1,7 @@
 package com.zxj.spring.controller;
 
 import com.google.gson.Gson;
+import com.zxj.log.EsLogger;
 import com.zxj.spring.service.IConsumerService;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
@@ -46,6 +47,7 @@ public class IndexController {
         map.put("time", new Date());
 
         Index index = new Index.Builder(g.toJson(map)).index("test").type("spring").build();
+        EsLogger.logger.info("put", "index", "put data into es!");
         try {
             DocumentResult result = jestClient.execute(index);
             return result.getJsonString();
@@ -93,9 +95,9 @@ public class IndexController {
 
     @GetMapping("/wildcardSearch")
     @ResponseBody
-    public String wildcardSearch(String name){
+    public String wildcardSearch(String filed, String value){
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder.query(QueryBuilders.wildcardQuery("name", "*"+name+"*"));
+        searchSourceBuilder.query(QueryBuilders.wildcardQuery(filed, "*"+value+"*"));
         searchSourceBuilder.size(2);
         searchSourceBuilder.from(0);
 
