@@ -18,7 +18,6 @@ import java.io.IOException;
  * @Date:Created in 9:39 2018/5/24
  */
 public class LogThread extends Thread{
-    @Autowired
     private JestClient jestClient;
     private Gson gson = new Gson();
 
