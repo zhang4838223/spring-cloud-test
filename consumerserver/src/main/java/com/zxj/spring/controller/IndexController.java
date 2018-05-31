@@ -40,6 +40,11 @@ public class IndexController {
         return "zhangxj:" + path + "; result: " + consumerService.doConsum();
     }
 
+    @GetMapping("/getConfig")
+    public String getConfig(){
+        return "zhangxj:" + path;
+    }
+
     @GetMapping("/put")
     public String put(){
         Map<String, Object> map = new HashMap<>();

@@ -8,7 +8,6 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
