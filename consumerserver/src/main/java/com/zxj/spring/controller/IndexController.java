@@ -2,6 +2,7 @@ package com.zxj.spring.controller;
 
 import com.google.gson.Gson;
 import com.zxj.log.EsLogger;
+import com.zxj.spring.common.ImageClassifyUtils;
 import com.zxj.spring.service.IConsumerService;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
@@ -13,6 +14,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -114,6 +116,14 @@ public class IndexController {
             e.printStackTrace();
             return "error";
         }
+    }
+
+    @PostMapping("/plantDetect")
+    @ResponseBody
+    public String plantDetect(String path){
+        String result = ImageClassifyUtils.getInstance().plantDetect("C:/Users/xiaojun.zhang1/Desktop/test1.png");
+//        String result = ImageClassifyUtils.getInstance().plantDetect(path);
+        return result;
     }
 
 }
