@@ -1,4 +1,4 @@
-package com.zxj.log;
+package com.zxj.netty;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,6 +15,6 @@ public class AppTest
     @Test
     public void shouldAnswerWithTrue()
     {
-        EsLogger.logger.info("test", "demo", "log test");
+        assertTrue( true );
     }
 }
